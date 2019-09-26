@@ -12,7 +12,7 @@ ImageToMap::ImageToMap()
 
 }
 
-void ImageToMap::imageCB(const sercor_msgs::ImageConstPtr& image)
+void ImageToMap::imageCB(const sensor_msgs::ImageConstPtr& image)
 {
 	try{
 		parseRawimg(image, frame);
@@ -23,7 +23,7 @@ void ImageToMap::imageCB(const sercor_msgs::ImageConstPtr& image)
 		cerr << e.what() << endl;
 	}
 	
-	imagefilter.backfilter(frame);
+	imagefilter.backfilter(frame, filter_img);
 
 }
 

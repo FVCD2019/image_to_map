@@ -5,9 +5,9 @@
 #include <vector>
 #include "opencv2/opencv.hpp"
 #include <cv_bridge/cv_bridge.h>
-#include <std_msgs/Header>
-#include <nav_msgs/MapMetaData>
-#include <nav_msgs/OccupancyGrid>
+#include <std_msgs/Header.h>
+#include <nav_msgs/MapMetaData.h>
+#include <nav_msgs/OccupancyGrid.h>
 #include "image_to_map/ImageFilter.h"
 #include <sensor_msgs/image_encodings.h>
 #include <image_transport/image_transport.h>
@@ -33,6 +33,7 @@ class ImageToMap
 
 		ImageFilter imagefilter;
 		cv::Mat frame;
+		cv::Mat filter_img;
 		
 		cv::Scalar upper_back_hsv;
 		cv::Scalar lower_back_hsv;
@@ -40,3 +41,4 @@ class ImageToMap
 
 };
 
+#endif
