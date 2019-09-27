@@ -45,8 +45,33 @@ void ImageToMap::parseRawimg(const sensor_msgs::ImageConstPtr& ros_img, cv::Mat&
 
 void ImageToMap::MakeMap()
 {
-	
+	int i_width = filter_img.rows;
+	int i_height = filter_img.cols;
+	int size = i_width * i_height; 
+	int8_t i_data[size] = {0};
+	int n = 0;	
 
+	for(int i = i_height; i > 0; i--){
+		for(int j = 0; j < i_width; j++){
+			if(filter_img.at<uchar>(j, i) != 0)
+				i_data[n] = 100;
+			else
+				i_data[n] = 0;
+			n++;
+		}
+	}
+	vector<int8_t> i_data_v;
+	i_data_v.assign(i_data, i_data+n);
+
+
+
+
+	i_map.info.resolution = 1.0;
+	i_map.info.width = i_width;
+	i_map.info.height = i_height;
+		
+
+	i_map.data = i_data_v;
 
 	//map_pub_.publish(image_map);
 }
