@@ -34,7 +34,8 @@ class ImageToMap
 		ImageFilter imagefilter;
 		cv::Mat frame;
 		cv::Mat filter_img;
-		
+
+		nav_msgs::OccupancyGrid i_map;		
 		int upper_h, upper_s, upper_v;
 		int lower_h, lower_s, lower_v;
 		
