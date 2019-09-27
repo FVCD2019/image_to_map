@@ -7,8 +7,15 @@ ImageToMap::ImageToMap()
 {
 	nh = ros::NodeHandle("~");
 	
-	map_pub_ = nh.advertise<nav_msgs/OccupancyGrid>("image_map", 1);
+	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("image_map", 1);
 	image_sub_ = nh.subscribe("/svm_image", 1, &ImageToMap::imageCB, this);
+	
+	nh.getParam("upper_h_",upper_h);
+	nh.getParam("upper_s_",upper_s);
+	nh.getParam("upper_v_",upper_v);
+	nh.getParam("lower_h_",lower_h);
+	nh.getParam("lower_s_",lower_s);
+	nh.getParam("lower_v_",lower_v);
 
 }
 
@@ -23,7 +30,7 @@ void ImageToMap::imageCB(const sensor_msgs::ImageConstPtr& image)
 		cerr << e.what() << endl;
 	}
 	
-	imagefilter.backfilter(frame, filter_img);
+	imagefilter.backfilter(frame, filter_img, upper_h, upper_s, upper_v, lower_h, lower_s, lower_v);
 
 }
 
@@ -41,5 +48,5 @@ void ImageToMap::MakeMap()
 	
 
 
-	map_pub_.publish(image_map);
+	//map_pub_.publish(image_map);
 }

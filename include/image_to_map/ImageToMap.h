@@ -35,8 +35,8 @@ class ImageToMap
 		cv::Mat frame;
 		cv::Mat filter_img;
 		
-		cv::Scalar upper_back_hsv;
-		cv::Scalar lower_back_hsv;
+		int upper_h, upper_s, upper_v;
+		int lower_h, lower_s, lower_v;
 		
 
 };

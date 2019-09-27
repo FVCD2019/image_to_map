@@ -14,13 +14,14 @@
 class ImageFilter
 {
 	public:
-		void backfilter(cv::Mat raw_image, cv::Mat &filtered_img);
+		void backfilter(cv::Mat raw_image, cv::Mat &filtered_img, int upper_h, int upper_s, int upper_v, int lower_h, int lower_s, int lower_v);
 
 	protected:
 			
 		cv::Scalar upper_back_hsv;
-		cv::Scalar lower_back_hsv;	
-
+		cv::Scalar lower_back_hsv;
+		int upper_h, upper_s, upper_v;
+		int lower_h, lower_s, lower_v;
 };
 
 #endif
