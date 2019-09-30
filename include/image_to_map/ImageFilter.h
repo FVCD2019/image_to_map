@@ -20,6 +20,8 @@ class ImageFilter
 			
 		cv::Scalar upper_back_hsv;
 		cv::Scalar lower_back_hsv;
+		cv::Scalar upper_back_rgb;
+		cv::Scalar lower_back_rgb;
 		int upper_h, upper_s, upper_v;
 		int lower_h, lower_s, lower_v;
 };
