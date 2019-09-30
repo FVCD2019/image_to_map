@@ -9,17 +9,24 @@ void ImageFilter::backfilter(cv::Mat raw_image, cv::Mat &filtered_img, int upper
 
 	upper_back_hsv = Scalar(upper_h, upper_s, upper_v);
 	lower_back_hsv = Scalar(lower_h, lower_s, lower_v);
+	upper_back_rgb = Scalar(175, 175, 175);
+	lower_back_rgb = Scalar(105, 105, 105);
 
 	Mat img_hsv;
 	Mat back_hsv_mask;
+	Mat back_rgb_mask;
+	Mat back_rgb;
 	Mat back_hsv;
-
+/*
 	cvtColor(raw_image, img_hsv, COLOR_BGR2HSV);
 	inRange(img_hsv, lower_back_hsv, upper_back_hsv, back_hsv_mask);
 	bitwise_and(raw_image, raw_image, back_hsv, back_hsv_mask);
 	cvtColor(back_hsv, back_hsv, COLOR_BGR2GRAY);
 	threshold(back_hsv, filtered_img, 150, 255, cv::THRESH_BINARY);
-	cout << "img_f" << endl;
+*/
+	inRange(raw_image, lower_back_rgb, upper_back_rgb, back_rgb_mask);
+	threshold(back_rgb_mask, filtered_img, 160, 255, cv::THRESH_BINARY);
 	imshow("filtered_img", filtered_img);
+	waitKey(3);
 
 }
