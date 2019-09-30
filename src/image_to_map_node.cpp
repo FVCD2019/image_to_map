@@ -8,7 +8,7 @@ ImageToMap::ImageToMap()
 	nh = ros::NodeHandle("~");
 	
 	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("image_map", 1);
-	image_sub_ = nh.subscribe("/svm_image", 1, &ImageToMap::imageCB, this);
+	image_sub_ = nh.subscribe("/usb_cam/image_raw", 1, &ImageToMap::imageCB, this);
 	
 	nh.getParam("upper_h_",upper_h);
 	nh.getParam("upper_s_",upper_s);
@@ -31,6 +31,7 @@ void ImageToMap::imageCB(const sensor_msgs::ImageConstPtr& image)
 	}
 	
 	imagefilter.backfilter(frame, filter_img, upper_h, upper_s, upper_v, lower_h, lower_s, lower_v);
+	MakeMap();
 
 }
 
@@ -83,5 +84,7 @@ void ImageToMap::MakeMap()
 
 	i_map.data = i_data_v;
 
+
 	map_pub_.publish(i_map);
+	cout << "pub" << endl;
 }

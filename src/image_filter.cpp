@@ -19,6 +19,7 @@ void ImageFilter::backfilter(cv::Mat raw_image, cv::Mat &filtered_img, int upper
 	bitwise_and(raw_image, raw_image, back_hsv, back_hsv_mask);
 	cvtColor(back_hsv, back_hsv, COLOR_BGR2GRAY);
 	threshold(back_hsv, filtered_img, 150, 255, cv::THRESH_BINARY);
+	cout << "img_f" << endl;
 	imshow("filtered_img", filtered_img);
 
 }
