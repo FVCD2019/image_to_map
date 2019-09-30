@@ -55,9 +55,9 @@ void ImageToMap::MakeMap()
 	for(int i = i_height; i > 0; i--){
 		for(int j = 0; j < i_width; j++){
 			if(filter_img.at<uchar>(j, i) != 0)
-				i_data[n] = 100;
-			else
 				i_data[n] = 0;
+			else
+				i_data[n] = 100;
 			n++;
 		}
 	}
