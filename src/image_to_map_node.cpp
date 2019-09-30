@@ -63,15 +63,25 @@ void ImageToMap::MakeMap()
 	vector<int8_t> i_data_v;
 	i_data_v.assign(i_data, i_data+n);
 
-
-
+//map 
+	header.seq = 0;
+	header.frame_id = "/image_map";
+	header.stamp = ros::Time::now();
+	
+	i_map.header = header;
 
 	i_map.info.resolution = 1.0;
 	i_map.info.width = i_width;
 	i_map.info.height = i_height;
-		
+	i_map.info.origin.position.x = 0;
+	i_map.info.origin.position.y = 0;
+	i_map.info.origin.position.z = 0;
+	i_map.info.origin.orientation.x = 0;
+	i_map.info.origin.orientation.y = 0;
+	i_map.info.origin.orientation.z = 0;
+	i_map.info.origin.orientation.w = 1;
 
 	i_map.data = i_data_v;
 
-	//map_pub_.publish(image_map);
+	map_pub_.publish(i_map);
 }

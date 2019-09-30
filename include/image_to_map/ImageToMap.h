@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <time.h>
 #include "opencv2/opencv.hpp"
 #include <cv_bridge/cv_bridge.h>
 #include <std_msgs/Header.h>
@@ -35,6 +36,7 @@ class ImageToMap
 		cv::Mat frame;
 		cv::Mat filter_img;
 
+		std_msgs::Header header;
 		nav_msgs::OccupancyGrid i_map;		
 		int upper_h, upper_s, upper_v;
 		int lower_h, lower_s, lower_v;
