@@ -1,12 +1,12 @@
 <launch>
 
 	<node pkg="image_to_map" type="image_to_map" name="image_to_map" output="screen">
-		<param name="upper_h_" value="360"/>
-		<param name="upper_s_" value="30"/>
-		<param name="upper_v_" value="50"/>
+		<param name="upper_h_" value="180"/>
+		<param name="upper_s_" value="15"/>
+		<param name="upper_v_" value="255"/>
 		<param name="lower_h_" value="0"/>
 		<param name="lower_s_" value="0"/>
-		<param name="lower_v_" value="0"/>
+		<param name="lower_v_" value="170"/>
 	</node>
 
 </launch>

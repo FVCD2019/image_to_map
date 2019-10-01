@@ -86,5 +86,4 @@ void ImageToMap::MakeMap()
 
 
 	map_pub_.publish(i_map);
-	cout << "pub" << endl;
 }
