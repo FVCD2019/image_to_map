@@ -6,9 +6,9 @@
 
 int main(int argc, char** argv)
 {
+
 	ros::init(argc, argv, "image_to_map");
 	ImageToMap image_to_map;
-
 	ros::spin();
 
 	return 0;

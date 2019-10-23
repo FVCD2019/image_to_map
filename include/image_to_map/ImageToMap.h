@@ -1,5 +1,6 @@
 #include <ros/ros.h>
-#include <opencv2/highgui.h>
+#include <opencv2/highgui.hpp>
+#include "opencv2/highgui/highgui.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
