@@ -8,53 +8,68 @@ ImageToMap::ImageToMap()
 	nh = ros::NodeHandle("~");
 	
 	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("image_map", 1);
-	image_sub_ = nh.subscribe("/usb_cam/image_raw", 1, &ImageToMap::imageCB, this);
+	space_sub_ = nh.subscribe("/detector/p_space", 1, &ImageToMap::spaceCB, this);
 	
-	nh.getParam("upper_h_",upper_h);
-	nh.getParam("upper_s_",upper_s);
-	nh.getParam("upper_v_",upper_v);
-	nh.getParam("lower_h_",lower_h);
-	nh.getParam("lower_s_",lower_s);
-	nh.getParam("lower_v_",lower_v);
 
 }
 
-void ImageToMap::imageCB(const sensor_msgs::ImageConstPtr& image)
+void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 {
-	try{
-		parseRawimg(image, frame);
-	} catch(const cv_bridge::Exception& e) {
-		ROS_ERROR("cv_bridge exception: %s", e.what());
-		return ;
-	} catch(const std::runtime_error& e) {
-		cerr << e.what() << endl;
+
+	space_id = (msg->data) -1;
+	MakeIMageMap(space_id,imap_);
+	MakeMap(imap_);
+
+}
+
+
+void ImageToMap::MakeIMageMap(int space_id, cv::Mat imap_)
+{
+	Mat raw_img(1150,1200,CV_8UC1,Scalar(255));
+
+	Mat img_space_raw;
+	Mat img_space;
+	raw_img.copyTo(img_space_raw);
+
+	for(int r = 100; r <= 1000; r++){
+		for(int c = 20; c <= 330; c++){
+			img_space_raw.at<uchar>(c,r) = 0;
+		}
 	}
-	
-	imagefilter.backfilter(frame, filter_img, upper_h, upper_s, upper_v, lower_h, lower_s, lower_v);
-	MakeMap();
 
-}
-
-void ImageToMap::parseRawimg(const sensor_msgs::ImageConstPtr& ros_img, cv::Mat& cv_img)
-{
-	cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(ros_img, sensor_msgs::image_encodings::BGR8);
-	cv_img = cv_ptr->image;
-	if (cv_img.empty()) {
-		throw std::runtime_error("frame is empty!");
+	for(int r = 110; r <= 650; r++){
+		for(int c = 810; c <= 1120; c++){
+			img_space_raw.at<uchar>(c,r) = 0;
+		}
 	}
+
+	img_space_raw.copyTo(img_space);
+
+	for(int r = p_list_lt_x[space_id]; r <= p_list_rt_x[space_id]; r++){
+		for(int c = p_list_lt_y[space_id]; c <= p_list_rt_y[space_id]; c++){
+			img_space.at<uchar>(c,r) = 255;
+		}
+	}
+
+	img_space.copyTo(imap_);
+	imshow("img_space", img_space);
+
+	waitKey(3);
+
+
 }
 
-void ImageToMap::MakeMap()
+void ImageToMap::MakeMap(cv::Mat imap)
 {
-	int i_width = filter_img.rows;
-	int i_height = filter_img.cols;
+	int i_width = imap.rows;
+	int i_height = imap.cols;
 	int size = i_width * i_height; 
 	int8_t i_data[size] = {0};
 	int n = 0;	
 
 	for(int i = i_height; i > 0; i--){
 		for(int j = 0; j < i_width; j++){
-			if(filter_img.at<uchar>(j, i) != 0)
+			if(imap.at<uchar>(j, i) != 0)
 				i_data[n] = 0;
 			else
 				i_data[n] = 100;

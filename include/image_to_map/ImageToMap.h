@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include <opencv2/highgui.hpp>
+#include <opencv2/highgui.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,6 +12,7 @@
 #include "image_to_map/ImageFilter.h"
 #include <sensor_msgs/image_encodings.h>
 #include <image_transport/image_transport.h>
+#include <std_msgs/Int16.h>
 
 #ifndef IMAGETOMAP_H
 #define IMAGETOMAP_H
@@ -21,26 +22,32 @@ class ImageToMap
 	public:
 		ImageToMap();
 
-		void imageCB(const sensor_msgs::ImageConstPtr& image);
+		void spaceCB(const std_msgs::Int16::ConstPtr& msg);
 
 	protected:
-		
-		void parseRawimg(const sensor_msgs::ImageConstPtr& ros_img, cv::Mat& cv_img);
-		void MakeMap();
+		void MakeIMageMap(int space_id, cv::Mat imap_);
+		void MakeMap(cv::Mat imap);
 		
 		ros::NodeHandle nh;
 		ros::Publisher map_pub_;
-		ros::Subscriber image_sub_;
+		ros::Subscriber space_sub_;
 
-		ImageFilter imagefilter;
-		cv::Mat frame;
-		cv::Mat filter_img;
+		cv::Mat imap_;
+		cv::Mat imap;
 
 		std_msgs::Header header;
-		nav_msgs::OccupancyGrid i_map;		
-		int upper_h, upper_s, upper_v;
-		int lower_h, lower_s, lower_v;
-		
+		nav_msgs::OccupancyGrid i_map;
+
+		int space_id;
+
+		int p_list_lt_x[8] = {100,280,460,640,820,110,290,470};
+		int p_list_lt_y[8] = {20,20,20,20,20,810,810,810};
+		int p_list_lb_x[8] = {100,280,460,640,820,110,290,470};
+		int p_list_lb_y[8] = {330,330,330,330,330,1120,1120,1120};
+		int p_list_rt_x[8] = {280,460,640,820,1000,290,470,650};
+		int p_list_rt_y[8] = {20,20,20,20,20,810,810,810};
+		int p_list_rb_x[8] = {280,460,640,820,1000,290,470,650};
+		int p_list_rb_y[8] = {330,330,330,330,330,1120,1120,1120};
 
 };
 

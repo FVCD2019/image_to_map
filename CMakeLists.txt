@@ -4,6 +4,7 @@ project(image_to_map)
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
+set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/../install")
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   OpenCV REQUIRED
@@ -42,7 +43,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME} src/main.cpp src/image_to_map_node.cpp src/image_filter.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/image_to_map_node.cpp )
 
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 

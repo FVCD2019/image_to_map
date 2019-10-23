@@ -14,7 +14,7 @@
 class ImageFilter
 {
 	public:
-		void backfilter(cv::Mat raw_image, cv::Mat &filtered_img, int upper_h, int upper_s, int upper_v, int lower_h, int lower_s, int lower_v);
+		void backfilter(cv::Mat &filtered_img, int space_id);
 
 	protected:
 			
