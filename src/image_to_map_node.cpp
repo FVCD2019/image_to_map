@@ -15,12 +15,12 @@ ImageToMap::ImageToMap()
 void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 {
 	space_id = (msg->data) -1;
-	MakeIMageMap(space_id,imap_);
-	MakeMap(imap_);
+	MakeIMageMap(space_id,imap);
+	MakeMap();
 }
 
 
-void ImageToMap::MakeIMageMap(int space_id, cv::Mat imap_)
+void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 {
 	Mat raw_img(1150,1200,CV_8UC1,Scalar(255));
 
@@ -44,25 +44,26 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat imap_)
 	img_space_raw.copyTo(img_space);
 
 ROS_INFO("space_id : %d" , space_id);
+/*
 ROS_INFO(" lt %d" , p_list_lt_x[space_id]);
 ROS_INFO(" rt %d" , p_list_rb_x[space_id]);
 ROS_INFO(" lt %d" , p_list_lt_y[space_id]);
 ROS_INFO(" rb %d" , p_list_rb_y[space_id]);
-
+*/
 	for(int r = p_list_lt_x[space_id]; r <= p_list_rb_x[space_id]; r++){
 		for(int c = p_list_lt_y[space_id]; c <= p_list_rb_y[space_id]; c++){
 			img_space.at<uchar>(c,r) = 255;
 		}
 	}
 
-	img_space.copyTo(imap_);
-	imshow("img_space", img_space);
+	img_space.copyTo(imap);
+	imshow("img_space", imap);
 
 	waitKey(3);
 
 }
 
-void ImageToMap::MakeMap(cv::Mat imap)
+void ImageToMap::MakeMap()
 {
 
 
@@ -70,15 +71,15 @@ void ImageToMap::MakeMap(cv::Mat imap)
 	int i_height = imap.cols;
 
     	vector<int8_t> i_data_v;
-    	for(int i=0; i<imap.rows; i++)
+
+    	for(int j=0; j<imap.cols; j++)
     	{
-      		for(int j=0; j<imap.cols; j++)
+      		for(int i=0; i<imap.rows; i++)
       		{
 			if(imap.at<uchar>(i,j) == 0)
-				i_data_v.push_back(0);
-			else
 				i_data_v.push_back(100);
-    			//i_data_v.push_back(imap.at<uchar>(i,j));
+			else
+				i_data_v.push_back(0);
       		}
     	}
 

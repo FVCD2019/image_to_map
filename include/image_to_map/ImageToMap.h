@@ -26,14 +26,13 @@ class ImageToMap
 		void spaceCB(const std_msgs::Int16::ConstPtr& msg);
 
 	protected:
-		void MakeIMageMap(int space_id, cv::Mat imap_);
-		void MakeMap(cv::Mat imap);
+		void MakeIMageMap(int space_id, cv::Mat &imap_);
+		void MakeMap();
 		
 		ros::NodeHandle nh;
 		ros::Publisher map_pub_;
 		ros::Subscriber space_sub_;
 
-		cv::Mat imap_;
 		cv::Mat imap;
 
 		std_msgs::Header header;

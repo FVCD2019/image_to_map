@@ -4,7 +4,7 @@
 
 ### To pubulish topic
 
-```rostopic pub /detector/p_space std_msgs/Int16 "1"```
+```rostopic pub -r 10 /detector/p_space std_msgs/Int16 "1"```
 
 ### Run
 
