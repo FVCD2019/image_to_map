@@ -5,9 +5,9 @@ using namespace cv;
 
 ImageToMap::ImageToMap()
 {
-	nh = ros::NodeHandle("~");
+	nh = ros::NodeHandle();
 	
-	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("image_map", 1);
+	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("map", 1);
 	space_sub_ = nh.subscribe("/detector/p_space", 1, &ImageToMap::spaceCB, this);
 	
 }
@@ -76,7 +76,7 @@ void ImageToMap::MakeMap()
     	{
       		for(int i=0; i<imap.rows; i++)
       		{
-			if(imap.at<uchar>(i,j) == 0)
+			if(imap.at<uchar>(imap.cols-j,i) == 0)
 				i_data_v.push_back(100);
 			else
 				i_data_v.push_back(0);
@@ -84,7 +84,7 @@ void ImageToMap::MakeMap()
     	}
 
 	header.seq = 0;
-	header.frame_id = "/image_map";
+	header.frame_id = "/map";
 	header.stamp = ros::Time::now();
 	
 	i_map.header = header;
