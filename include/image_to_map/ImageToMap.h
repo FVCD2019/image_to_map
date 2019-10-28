@@ -27,13 +27,14 @@ class ImageToMap
 
 	protected:
 		void MakeIMageMap(int space_id, cv::Mat &imap_);
-		void MakeMap();
+		void MakeMap(cv::Mat &imap);
 		
 		ros::NodeHandle nh;
 		ros::Publisher map_pub_;
 		ros::Subscriber space_sub_;
 
 		cv::Mat imap;
+		cv::Mat imap_;
 
 		std_msgs::Header header;
 		nav_msgs::OccupancyGrid i_map;
