@@ -41,7 +41,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 		}
 	}
 
-
+//
 /*
 	for(int r = p_list_lt_x[0]+2; r <= p_list_rt_x[0]-1; r++){
 		for(int c = p_list_lt_y[0]+2; c <= p_list_lb_y[0]; c++){
@@ -92,7 +92,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 		}
 	}
 */
-
+//
 
 	//cv::imshow("img_space_raw", img_space_raw);
 	img_space_raw.copyTo(img_space);
@@ -148,7 +148,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 	
 	i_map.header = header;
 
-	i_map.info.resolution = 1.0;
+	i_map.info.resolution = 0.005;
 	i_map.info.width = i_width;
 	i_map.info.height = i_height;
 	i_map.info.origin.position.x = 0;
