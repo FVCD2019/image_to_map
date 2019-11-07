@@ -35,13 +35,17 @@ class ImageToMap
 
 		cv::Mat imap;
 		cv::Mat imap_;
+		cv::Mat convert_img;
 
 		std_msgs::Header header;
 		nav_msgs::OccupancyGrid i_map;
 
 		int space_id;
 
-		int p_list_lt_x[8] = {100,280,460,640,820,110,290,470};
+		int p_list_x[10] = {110,294,470,651,830,1009,111,292,472,651};
+		int p_list_y[4] = {0,318,816,1200};
+
+		int p_list_lt_x[8] = {110,294,470,651,830,1009,290,470};
 		int p_list_lt_y[8] = {20,20,20,20,20,810,810,810};
 		int p_list_lb_x[8] = {100,280,460,640,820,110,290,470};
 		int p_list_lb_y[8] = {330,330,330,330,330,1120,1120,1120};
