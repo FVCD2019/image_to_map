@@ -31,14 +31,17 @@ class ImageToMap
 		
 		ros::NodeHandle nh;
 		ros::Publisher map_pub_;
+		ros::Publisher map_pub_local;
 		ros::Subscriber space_sub_;
 
 		cv::Mat imap;
 		cv::Mat imap_;
+		cv::Mat imap_local;
 		cv::Mat convert_img;
 
 		std_msgs::Header header;
 		nav_msgs::OccupancyGrid i_map;
+		nav_msgs::OccupancyGrid i_map_local;
 
 		int space_id;
 

@@ -7,7 +7,8 @@ ImageToMap::ImageToMap()
 {
 	nh = ros::NodeHandle();
 	
-	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("imap", 1);
+	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("map", 1);
+	map_pub_local = nh.advertise<nav_msgs::OccupancyGrid>("imap", 1);
 	space_sub_ = nh.subscribe("/detector/p_space", 1, &ImageToMap::spaceCB, this);
 	
 }
@@ -63,71 +64,12 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 		}
 	}
 
-//
-/*
-	for(int r = p_list_lt_x[0]+2; r <= p_list_rt_x[0]-1; r++){
-		for(int c = p_list_lt_y[0]+2; c <= p_list_lb_y[0]; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-
-
-	for(int r = p_list_lt_x[1]+1; r <= p_list_rt_x[1]-1; r++){
-		for(int c = p_list_lt_y[0]+2; c <= p_list_lb_y[0]; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-
-	for(int r = p_list_lt_x[2]+1; r <= p_list_rt_x[2]-1; r++){
-		for(int c = p_list_lt_y[0]+2; c <= p_list_lb_y[0]; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-
-	for(int r = p_list_lt_x[3]+1; r <= p_list_rt_x[3]-1; r++){
-		for(int c = p_list_lt_y[0]+2; c <= p_list_lb_y[0]; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-
-	for(int r = p_list_lt_x[4]+1; r <= p_list_rt_x[4]-2; r++){
-		for(int c = p_list_lt_y[0]+2; c <= p_list_lb_y[0]; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-
-	for(int r = p_list_lt_x[5]+2; r <= p_list_rt_x[5]-1; r++){
-		for(int c = p_list_lt_y[5]; c <= p_list_lb_y[5]-2; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-
-	for(int r = p_list_lt_x[6]+1; r <= p_list_rt_x[6]-1; r++){
-		for(int c = p_list_lt_y[5]; c <= p_list_lb_y[5]-2; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-
-	for(int r = p_list_lt_x[7]+1; r <= p_list_rt_x[7]-2; r++){
-		for(int c = p_list_lt_y[5]; c <= p_list_lb_y[5]-2; c++){
-			img_space_raw.at<uchar>(c,r) = 255;
-		}
-	}
-*/
-//
-
 	//cv::imshow("img_space_raw", img_space_raw);
 	img_space_raw.copyTo(img_space);
 	//cv::imwrite("g_map.png",img_space);
 
 //ROS_INFO("space_id : %d" , space_id);
 
-/*
-ROS_INFO(" lt %d" , p_list_lt_x[space_id]);
-ROS_INFO(" rt %d" , p_list_rb_x[space_id]);
-ROS_INFO(" lt %d" , p_list_lt_y[space_id]);
-ROS_INFO(" rb %d" , p_list_rb_y[space_id]);
-*/
 
 	if (space_id >=0 && space_id < 8){
 		for(int r = p_list_x[space_id]+2; r <= p_list_x[space_id+1]-2; r++){
@@ -145,7 +87,6 @@ ROS_INFO(" rb %d" , p_list_rb_y[space_id]);
 
 	img_space.copyTo(imap);
 	//imshow("img_space", imap);
-
 	//waitKey(3);
 
 
@@ -154,16 +95,15 @@ ROS_INFO(" rb %d" , p_list_rb_y[space_id]);
 void ImageToMap::MakeMap(cv::Mat &imap_)
 {
 	imap_.copyTo(convert_img);
-	resize(imap_,convert_img,cv::Size(imap_.cols*0.25, imap_.rows*0.25),0.0,CV_INTER_NN);
+	resize(imap_,convert_img,cv::Size(imap_.cols*0.5, imap_.rows*0.5),0.0,CV_INTER_NN);
 	//imshow("convert_img", convert_img);
-
 	//waitKey(3);
 	int i_width = convert_img.cols;
 	int i_height = convert_img.rows;
 	//std::cout << i_width << " " << i_height << std::endl;
     	vector<int8_t> i_data_v;
 
-    	for(int j=1; j<i_height; j++)
+    	for(int j=0; j<i_height; j++)
     	{
       		for(int i=0; i<i_width; i++)
       		{
@@ -174,6 +114,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 				i_data_v.push_back(0);}
       		}
     	}
+	//std::cout << "size" << i_data_v.size() << std::endl;
 
 	header.seq = 0;
 	header.frame_id = "map";
@@ -181,7 +122,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 	
 	i_map.header = header;
 
-	i_map.info.resolution = 0.02;
+	i_map.info.resolution = 0.01;
 	i_map.info.width = i_width;
 	i_map.info.height = i_height;
 	i_map.info.origin.position.x = 0;
@@ -195,5 +136,50 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 	i_map.data = i_data_v;
 
 	map_pub_.publish(i_map);
+
+
+//local
+	imap_.copyTo(imap_local);
+	resize(imap_,imap_local,cv::Size(imap_.cols*0.05, imap_.rows*0.05),0.0,CV_INTER_NN);
+	//imshow("convert_img", convert_img);
+	//waitKey(3);
+	int i_width_local = imap_local.cols;
+	int i_height_local = imap_local.rows;
+	//std::cout << i_width << " " << i_height << std::endl;
+    	vector<int8_t> i_data_v_local;
+
+    	for(int j=0; j<i_height_local; j++)
+    	{
+      		for(int i=0; i<i_width_local; i++)
+      		{
+//ROS_INFO("i:%d  j:%d",i,imap_.cols-j);
+			if(imap_local.at<uchar>(i_height_local-j,i) == 0){
+				i_data_v_local.push_back(100);}
+			else{
+				i_data_v_local.push_back(0);}
+      		}
+    	}
+	//std::cout << "size" << i_data_v.size() << std::endl;
+
+	header.seq = 0;
+	header.frame_id = "map";
+	header.stamp = ros::Time::now();
+	
+	i_map_local.header = header;
+
+	i_map_local.info.resolution = 0.1;
+	i_map_local.info.width = i_width_local;
+	i_map_local.info.height = i_height_local;
+	i_map_local.info.origin.position.x = 0;
+	i_map_local.info.origin.position.y = 0;
+	i_map_local.info.origin.position.z = 0;
+	i_map_local.info.origin.orientation.x = 0;
+	i_map_local.info.origin.orientation.y = 0;
+	i_map_local.info.origin.orientation.z = 0;
+	i_map_local.info.origin.orientation.w = 1;
+
+	i_map_local.data = i_data_v_local;
+
+	map_pub_local.publish(i_map_local);
 
 }
