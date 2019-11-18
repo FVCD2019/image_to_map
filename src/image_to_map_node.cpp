@@ -103,9 +103,9 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 	//std::cout << i_width << " " << i_height << std::endl;
     	vector<int8_t> i_data_v;
 
-    	for(int j=0; j<i_height; j++)
+    	for(int j=1; j<=i_height; j++)
     	{
-      		for(int i=0; i<i_width; i++)
+      		for(int i=1; i<=i_width; i++)
       		{
 //ROS_INFO("i:%d  j:%d",i,imap_.cols-j);
 			if(convert_img.at<uchar>(i_height-j,i) == 0){
@@ -140,17 +140,17 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 
 //local
 	imap_.copyTo(imap_local);
-	resize(imap_,imap_local,cv::Size(imap_.cols*0.05, imap_.rows*0.05),0.0,CV_INTER_NN);
-	//imshow("convert_img", convert_img);
-	//waitKey(3);
+	resize(imap_,imap_local,cv::Size(imap_.cols*0.1, imap_.rows*0.1),0.0);
+	imshow("convert_img", imap_local);
+	waitKey(3);
 	int i_width_local = imap_local.cols;
 	int i_height_local = imap_local.rows;
 	//std::cout << i_width << " " << i_height << std::endl;
     	vector<int8_t> i_data_v_local;
 
-    	for(int j=0; j<i_height_local; j++)
+    	for(int j=1; j<=i_height_local; j++)
     	{
-      		for(int i=0; i<i_width_local; i++)
+      		for(int i=1; i<=i_width_local; i++)
       		{
 //ROS_INFO("i:%d  j:%d",i,imap_.cols-j);
 			if(imap_local.at<uchar>(i_height_local-j,i) == 0){
@@ -167,7 +167,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 	
 	i_map_local.header = header;
 
-	i_map_local.info.resolution = 0.1;
+	i_map_local.info.resolution = 0.05;
 	i_map_local.info.width = i_width_local;
 	i_map_local.info.height = i_height_local;
 	i_map_local.info.origin.position.x = 0;
