@@ -18,7 +18,7 @@ void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 	space_id = (msg->data) -1;
 	MakeIMageMap(space_id,imap);
 	imap.copyTo(imap_);
-	//MakeMap(imap_);
+	MakeMap(imap_);
 }
 
 
@@ -70,7 +70,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	if(space_id >=5 && space_id < 8){
 		space_id = space_id + 1;
 	}
-	cout << space_id << endl;
+	//cout << space_id << endl;
 
 	if (space_id >=0 && space_id < 9){
 		for(int r = p_list_x[space_id]+2; r <= p_list_x[space_id+1]-2; r++){
@@ -87,8 +87,8 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	}
 
 	img_space.copyTo(imap);
-	imshow("img_space", imap);
-	waitKey(3);
+	//imshow("img_space", imap);
+	//waitKey(3);
 
 
 }
