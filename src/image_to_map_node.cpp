@@ -9,7 +9,7 @@ ImageToMap::ImageToMap()
 	
 	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("map", 1);
 	map_pub_local = nh.advertise<nav_msgs::OccupancyGrid>("imap", 1);
-	space_sub_ = nh.subscribe("/detector/p_space", 1, &ImageToMap::spaceCB, this);
+	space_sub_ = nh.subscribe("/p_space_id", 1, &ImageToMap::spaceCB, this);
 	
 }
 
@@ -18,19 +18,19 @@ void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 	space_id = (msg->data) -1;
 	MakeIMageMap(space_id,imap);
 	imap.copyTo(imap_);
-	MakeMap(imap_);
+	//MakeMap(imap_);
 }
 
 
 void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 {
-	Mat raw_img(1200,1500,CV_8UC1,Scalar(255));
+	Mat raw_img(1200,1300,CV_8UC1,Scalar(255));
 
 	Mat img_space_raw;
 	Mat img_space;
 	raw_img.copyTo(img_space_raw);
 
-	for(int r = 0; r < 1500; r++){
+	for(int r = 0; r < 1300; r++){
 		for(int c = 0; c < 10; c++){
 			img_space_raw.at<uchar>(c,r) = 0;
 		}
@@ -45,7 +45,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 		}
 	}
 
-	for(int r = 1490; r < 1500; r++){
+	for(int r = 1290; r < 1300; r++){
 		for(int c = 0; c < 1200; c++){
 			img_space_raw.at<uchar>(c,r) = 0;
 		}
@@ -59,19 +59,20 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	}
 
 	for(int r = p_list_x[6]; r <= p_list_x[9]; r++){
-		for(int c = p_list_y[2]-2; c <= p_list_y[3]; c++){
+		for(int c = p_list_y[2]-2; c < p_list_y[3]; c++){
 			img_space_raw.at<uchar>(c,r) = 0;
 		}
 	}
-
 	//cv::imshow("img_space_raw", img_space_raw);
 	img_space_raw.copyTo(img_space);
 	//cv::imwrite("g_map.png",img_space);
+	//cout << "DONE" << endl;
+	if(space_id >=5 && space_id < 8){
+		space_id = space_id + 1;
+	}
+	cout << space_id << endl;
 
-//ROS_INFO("space_id : %d" , space_id);
-
-
-	if (space_id >=0 && space_id < 8){
+	if (space_id >=0 && space_id < 9){
 		for(int r = p_list_x[space_id]+2; r <= p_list_x[space_id+1]-2; r++){
 			if (space_id < 5){
 				for(int c = p_list_y[0]+10; c <= p_list_y[1]+2; c++){
@@ -86,8 +87,8 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	}
 
 	img_space.copyTo(imap);
-	//imshow("img_space", imap);
-	//waitKey(3);
+	imshow("img_space", imap);
+	waitKey(3);
 
 
 }
