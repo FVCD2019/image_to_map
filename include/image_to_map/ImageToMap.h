@@ -24,6 +24,7 @@ class ImageToMap
 		ImageToMap();
 
 		void spaceCB(const std_msgs::Int16::ConstPtr& msg);
+		void run();
 
 	protected:
 		void MakeIMageMap(int space_id, cv::Mat &imap_);
@@ -44,6 +45,7 @@ class ImageToMap
 		nav_msgs::OccupancyGrid i_map_local;
 
 		int space_id;
+		bool flag;
 
 		int p_list_x[10] = {110,293,473,653,833,1013,110,289,474,653};
 		int p_list_y[4] = {0,310,813,1200};
