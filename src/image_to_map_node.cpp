@@ -3,6 +3,22 @@
 using namespace std;
 using namespace cv;
 
+int main(int argc, char** argv)
+{
+
+	ros::init(argc, argv, "image_to_map");
+	ImageToMap image_to_map;
+	ros::Rate r(30);
+	while (ros::ok()){
+		image_to_map.run();
+		ros::spinOnce();
+		r.sleep();
+	}
+
+	return 0;
+}
+
+
 ImageToMap::ImageToMap()
 {
 	nh = ros::NodeHandle();
@@ -10,20 +26,28 @@ ImageToMap::ImageToMap()
 	map_pub_ = nh.advertise<nav_msgs::OccupancyGrid>("map", 1);
 	map_pub_local = nh.advertise<nav_msgs::OccupancyGrid>("imap", 1);
 	space_sub_ = nh.subscribe("/p_space_id", 1, &ImageToMap::spaceCB, this);
+	flag = false;
 	
 }
 
 void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 {
 	space_id = (msg->data);
+}
+
+void ImageToMap::run()
+{
 	MakeIMageMap(space_id,imap);
 	imap.copyTo(imap_);
 	MakeMap(imap_);
+	if(space_id != 8){
+		flag = true;
+	}
 }
-
 
 void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 {
+	if(!flag){
 	Mat raw_img(1200,1300,CV_8UC1,Scalar(255));
 
 	Mat img_space_raw;
@@ -87,6 +111,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	}
 
 	img_space.copyTo(imap);
+	}
 	//imshow("img_space", imap);
 	//waitKey(3);
 
@@ -95,6 +120,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 
 void ImageToMap::MakeMap(cv::Mat &imap_)
 {
+	if(!flag){
 	imap_.copyTo(convert_img);
 	resize(imap_,convert_img,cv::Size(imap_.cols*0.5, imap_.rows*0.5),0.0,CV_INTER_NN);
 	//imshow("convert_img", convert_img);
@@ -184,5 +210,9 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 	i_map_local.data = i_data_v_local;
 
 	map_pub_local.publish(i_map_local);
+	}else{
+		map_pub_.publish(i_map);
+		map_pub_local.publish(i_map_local);
+	}
 
 }
