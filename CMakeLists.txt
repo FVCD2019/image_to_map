@@ -18,20 +18,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf2
 )
 
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
-
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   nav_msgs#   std_msgs
-# )
-
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES image_to_map
@@ -44,7 +30,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME} src/main.cpp src/image_to_map_node.cpp )
+add_executable(${PROJECT_NAME} src/image_to_map_node.cpp )
 
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
