@@ -15,7 +15,7 @@ ImageToMap::ImageToMap()
 
 void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 {
-	space_id = (msg->data) -1;
+	space_id = (msg->data);
 	MakeIMageMap(space_id,imap);
 	imap.copyTo(imap_);
 	MakeMap(imap_);
@@ -73,7 +73,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	//cout << space_id << endl;
 
 	if (space_id >=0 && space_id < 9){
-		for(int r = p_list_x[space_id]+2; r <= p_list_x[space_id+1]-2; r++){
+		for(int r = p_list_x[space_id]-20; r <= p_list_x[space_id+1]+20; r++){
 			if (space_id < 5){
 				for(int c = p_list_y[0]+10; c <= p_list_y[1]+2; c++){
 					img_space.at<uchar>(c,r) = 255;
@@ -110,6 +110,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
       		{
 //ROS_INFO("i:%d  j:%d",i,imap_.cols-j);
 			if(convert_img.at<uchar>(i_height-j,i) == 0){
+			//if(convert_img.at<uchar>(j,i) == 0){
 				i_data_v.push_back(100);}
 			else{
 				i_data_v.push_back(0);}
@@ -142,8 +143,8 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 //local
 	imap_.copyTo(imap_local);
 	resize(imap_,imap_local,cv::Size(imap_.cols*0.1, imap_.rows*0.1),0.0);
-	imshow("convert_img", imap_local);
-	waitKey(3);
+	//imshow("convert_img", imap_local);
+	//waitKey(3);
 	int i_width_local = imap_local.cols;
 	int i_height_local = imap_local.rows;
 	//std::cout << i_width << " " << i_height << std::endl;
@@ -154,6 +155,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
       		for(int i=1; i<=i_width_local; i++)
       		{
 //ROS_INFO("i:%d  j:%d",i,imap_.cols-j);
+			//if(imap_local.at<uchar>(i_height_local-j,i) == 0){
 			if(imap_local.at<uchar>(i_height_local-j,i) == 0){
 				i_data_v_local.push_back(100);}
 			else{
