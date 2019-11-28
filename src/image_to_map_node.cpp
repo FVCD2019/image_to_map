@@ -40,7 +40,8 @@ void ImageToMap::run()
 	MakeIMageMap(space_id,imap);
 	imap.copyTo(imap_);
 	MakeMap(imap_);
-	if(space_id != 8){
+	if(space_id >= 0 && space_id <= 7){
+		//cout << space_id << endl;
 		flag = true;
 	}
 }
