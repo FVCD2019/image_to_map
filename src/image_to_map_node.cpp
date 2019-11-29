@@ -27,12 +27,20 @@ ImageToMap::ImageToMap()
 	map_pub_local = nh.advertise<nav_msgs::OccupancyGrid>("imap", 1);
 	space_sub_ = nh.subscribe("/p_space_id", 1, &ImageToMap::spaceCB, this);
 	flag = false;
+	count = 0;
 	
 }
 
 void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 {
 	space_id = (msg->data);
+	cout << space_id << endl;
+	if(count > 20){
+		cout << space_id << endl;
+		flag =true;
+	}else{
+		count++;
+	}
 }
 
 void ImageToMap::run()
@@ -40,10 +48,6 @@ void ImageToMap::run()
 	MakeIMageMap(space_id,imap);
 	imap.copyTo(imap_);
 	MakeMap(imap_);
-	if(space_id >= 0 && space_id <= 7){
-		//cout << space_id << endl;
-		flag = true;
-	}
 }
 
 void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
@@ -78,7 +82,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 
 
 	for(int r = p_list_x[0]-2; r <= p_list_x[5]+2; r++){
-		for(int c = p_list_y[0]; c <= p_list_y[1]+2; c++){
+		for(int c = p_list_y[0]; c <= p_list_y[1]; c++){
 			img_space_raw.at<uchar>(c,r) = 0;
 		}
 	}
@@ -98,9 +102,9 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	//cout << space_id << endl;
 
 	if (space_id >=0 && space_id < 9){
-		for(int r = p_list_x[space_id]-20; r <= p_list_x[space_id+1]+20; r++){
+		for(int r = p_list_x[space_id]-5; r <= p_list_x[space_id+1]+5; r++){
 			if (space_id < 5){
-				for(int c = p_list_y[0]+10; c <= p_list_y[1]+2; c++){
+				for(int c = p_list_y[0]+10; c <= p_list_y[1]; c++){
 					img_space.at<uchar>(c,r) = 255;
 				}
 			}else{

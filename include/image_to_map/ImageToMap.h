@@ -46,6 +46,7 @@ class ImageToMap
 
 		int space_id;
 		bool flag;
+		int count;
 
 		int p_list_x[10] = {110,293,473,653,833,1013,110,289,474,653};
 		int p_list_y[4] = {0,310,813,1200};
