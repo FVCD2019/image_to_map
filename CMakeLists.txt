@@ -5,10 +5,10 @@ project(image_to_map)
 add_compile_options(-std=c++11)
 
 #set(OpenCV_DIR /opt/ros/kinetic/share/OpenCV-3.3.1-dev)
-#set(OpenCV_DIR /usr/share/OpenCV)
+set(OpenCV_DIR /usr/share/OpenCV)
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
-#  OpenCV REQUIRED
+  OpenCV REQUIRED
   image_transport
   geometry_msgs
   nav_msgs
