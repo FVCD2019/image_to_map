@@ -36,7 +36,7 @@ void ImageToMap::spaceCB(const std_msgs::Int16::ConstPtr& msg)
 	space_id = (msg->data);
 	//cout << space_id << endl;
 	if(count > 20){
-		cout << space_id << endl;
+		//cout << space_id << endl;
 		flag =true;
 	}else{
 		count++;
@@ -134,7 +134,7 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 	img_space.copyTo(imap);
 	}
 	//imshow("img_space", imap);
-	waitKey(3);
+	//waitKey(3);
 
 
 }
@@ -144,7 +144,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 	if(!flag){
 	imap_.copyTo(convert_img);
 	resize(imap_,convert_img,cv::Size(imap_.cols*0.5, imap_.rows*0.5),0.0,CV_INTER_NN);
-	imshow("convert_img", convert_img);
+	//imshow("convert_img", convert_img);
 	//waitKey(3);
 	int i_width = convert_img.cols;
 	int i_height = convert_img.rows;
@@ -190,7 +190,7 @@ void ImageToMap::MakeMap(cv::Mat &imap_)
 //local
 	imap_.copyTo(imap_local);
 	resize(imap_,imap_local,cv::Size(imap_.cols*0.1, imap_.rows*0.1),0.0);
-	imshow("convert_img_local", imap_local);
+	//imshow("convert_img_local", imap_local);
 	//waitKey(3);
 	int i_width_local = imap_local.cols;
 	int i_height_local = imap_local.rows;
