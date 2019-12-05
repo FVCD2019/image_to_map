@@ -71,13 +71,13 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 		}
 	}
 
-	for(int r = 0; r < 10; r++){
+	for(int r = 0; r < 15; r++){
 		for(int c = 0; c < 1200; c++){
 			img_space_raw.at<uchar>(c,r) = 0;
 		}
 	}
 
-	for(int r = 1290; r < 1300; r++){
+	for(int r = 1190; r < 1300; r++){
 		for(int c = 0; c < 1200; c++){
 			img_space_raw.at<uchar>(c,r) = 0;
 		}
@@ -106,25 +106,25 @@ void ImageToMap::MakeIMageMap(int space_id, cv::Mat &imap)
 
 	if (space_id >=0 && space_id < 9){
 		if(space_id == 0){
-			for(int r = p_list_x[space_id]+5; r <= p_list_x[space_id+1]+5; r++){
-				for(int c = p_list_y[0]+10; c <= p_list_y[1]; c++){
+			for(int r = p_list_x[space_id]+5; r <= p_list_x[space_id+1]+10; r++){
+				for(int c = p_list_y[0]+15; c <= p_list_y[1]; c++){
 					img_space.at<uchar>(c,r) = 255;
 				}
 			}
 		}else if(space_id == 8){
-			for(int r = p_list_x[space_id]-5; r <= p_list_x[space_id+1]-5; r++){
-				for(int c = p_list_y[2]-2; c <= p_list_y[3]-10; c++){
+			for(int r = p_list_x[space_id]-10; r <= p_list_x[space_id+1]-5; r++){
+				for(int c = p_list_y[2]-2; c <= p_list_y[3]-15; c++){
 					img_space.at<uchar>(c,r) = 255;
 				}
 			}
 		}else{
-			for(int r = p_list_x[space_id]-5; r <= p_list_x[space_id+1]+5; r++){
+			for(int r = p_list_x[space_id]-10; r <= p_list_x[space_id+1]+10; r++){
 				if (space_id < 5){
-					for(int c = p_list_y[0]+10; c <= p_list_y[1]; c++){
+					for(int c = p_list_y[0]+15; c <= p_list_y[1]; c++){
 						img_space.at<uchar>(c,r) = 255;
 					}
 				}else{
-					for(int c = p_list_y[2]-2; c <= p_list_y[3]-10; c++){
+					for(int c = p_list_y[2]-2; c <= p_list_y[3]-15; c++){
 						img_space.at<uchar>(c,r) = 255;
 					}
 				}
